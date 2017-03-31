@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/latentlot/ses/issues"
   },
-  "homepage": "https://github.com/latentlot/ses#readme"
+  "homepage": "https://github.com/latentlot/ses#readme",
+  "dependencies": {
+    "jsonfile": "^2.4.0",
+    "r-script": "0.0.3"
+  }
 }
