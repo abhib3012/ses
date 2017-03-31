@@ -1,6 +1,7 @@
 //var R = require("r-script");
 var jsonfile = require('jsonfile');
 var babar = require('babar');
+var loading = require('cartoon-loading');
 
 var file = 'keywords.json';
 
@@ -15,6 +16,25 @@ var globalScore = 0;
 var totolScore = 19;
 
 var score = [];
+
+loading.start({
+  /*
+    In miliseconds
+  */
+  interval: 100, // Default 30
+  /*
+    default, black, red, green, yellow, blue, magenta, cyan, light_gray, dark_ray, light_red, light_green, light_yellow, light_blue, light_magenta, light_cyan, default_White
+  */
+  color: 'default',  // Default default
+  bold: true,        // Default false
+  underlined: false, // Default false
+  /*
+  Defaults names:
+    newave, line, ball, fish, yoyo, song, dance, arrow, wave-01, wave-02
+  */
+  loading: 'wave-02' // Default newave :)
+  // or:
+});
 
 //var globalJson;
 jsonfile.readFile(file, function(err, obj) {
@@ -59,6 +79,9 @@ function process(obj) {
 
 function showme(score) {
   //console.log(score);
-  score.push([(score.length + 1), 0])
-  console.log(babar(score));
+  setTimeout( function () {
+    loading.stop()
+    score.push([(score.length + 1), 0])
+    console.log(babar(score));
+  }, 2000);
 }

@@ -18,6 +18,7 @@
   "homepage": "https://github.com/latentlot/ses#readme",
   "dependencies": {
     "babar": "^0.1.0",
+    "cartoon-loading": "^1.0.2",
     "jsonfile": "^2.4.0"
   }
 }
