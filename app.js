@@ -74,11 +74,7 @@ function process(obj) {
     score.push([(a+1), globalScore/totolScore]);
     globalScore = 0;
   }
-  showme(score);
-}
 
-function showme(score) {
-  //console.log(score);
   setTimeout( function () {
     loading.stop()
     score.push([(score.length + 1), 0])
