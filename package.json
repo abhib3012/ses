@@ -18,9 +18,6 @@
   "homepage": "https://github.com/latentlot/ses#readme",
   "dependencies": {
     "babar": "^0.1.0",
-    "cli-chart": "^0.3.1",
-    "cli-graph": "^3.2.2",
-    "jsonfile": "^2.4.0",
-    "r-script": "0.0.3"
+    "jsonfile": "^2.4.0"
   }
 }
