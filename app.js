@@ -1,14 +1,21 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var jsonfile = require('jsonfile');
+var request = require('request');
 
 mongoose.connect('mongodb://localhost/ses');
 
+//let Wit = null;
+//let interactive = null;
+
+Wit = require('node-wit').Wit;
+interactive = require('node-wit').interactive;
 
 var answer = mongoose.model('answers', 
 	{
 		answer: String,
-		grade: Number
+		grade: Number,
+		question: String
 	}
 );
 
@@ -59,7 +66,7 @@ app.post('/grade/', cors(corsOptions), function (req, res) {
 	    res.send({score: globalScore});
 	    
 		//Save answer for further queries
-	  	var logger = new answer({ answer: req.body.answer, grade: globalScore });
+	  	var logger = new answer({ answer: req.body.answer, grade: globalScore, question: 'photosynthesis' });
 	  	
 		logger.save(function (err) {
 		  if (err) {
@@ -71,6 +78,39 @@ app.post('/grade/', cors(corsOptions), function (req, res) {
 	
 	});
 	
+});
+
+app.post('/ask/', cors(corsOptions), function (req, res) {
+	
+	var question =  req.body.question;
+	var options = {
+	  url: 'https://api.wit.ai/message?v=20170408&q=' + question,
+	  headers: {
+	    'Authorization': 'Bearer E3GDZKK7S5EI3NC6JWIVOO2IXGP53UHI'
+	  }
+	};
+	 
+	function callback(error, response, body) {
+	  if (!error && response.statusCode == 200) {
+	    var info = JSON.parse(body);
+	    //console.log(info['entities'].subject[0].value);
+	    //console.log(info['entities'].intent[0].value);
+	    if(info['entities']) {
+	    	res.send("Definition of : " + info['entities'].subject[0].value);
+	    }
+	    else {
+		    res.send('No data on this subject :/');
+	    }
+	    //console.log(info.stargazers_count + " Stars");
+	    //console.log(info.forks_count + " Forks");
+	  }
+	}
+	 
+	request(options, callback);
+});
+
+app.post('/', cors(corsOptions), function (req, res) {
+	//
 });
 
 app.get('/', cors(corsOptions), function (req, res) {
