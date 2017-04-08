@@ -96,10 +96,23 @@ app.post('/ask/', cors(corsOptions), function (req, res) {
 	    //console.log(info['entities'].subject[0].value);
 	    //console.log(info['entities'].intent[0].value);
 	    if(info['entities']) {
-	    	res.send("Definition of : " + info['entities'].subject[0].value);
+		    
+		    answer.findOne()
+			    //.where({field1: 1})
+			    .sort('-grade')
+			    .exec(function(err, doc)
+			    {
+				    //console.log(doc.answer)
+				    res.send({'subject': info['entities'].subject[0].value, 'definition': doc.answer});
+			        //var max = doc.LAST_MOD;
+			        // ...
+			    }
+			);
+
+	    	
 	    }
 	    else {
-		    res.send('No data on this subject :/');
+		    res.send({ 'subject': 'No data on this subject :/', 'definition' : ' '});
 	    }
 	    //console.log(info.stargazers_count + " Stars");
 	    //console.log(info.forks_count + " Forks");
@@ -114,7 +127,7 @@ app.post('/', cors(corsOptions), function (req, res) {
 });
 
 app.get('/', cors(corsOptions), function (req, res) {
-	res.send('Hello world');
+	res.sendfile('static/index.html');
 });
 
 app.listen(80);
