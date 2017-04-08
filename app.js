@@ -95,7 +95,7 @@ app.post('/ask/', cors(corsOptions), function (req, res) {
 	    var info = JSON.parse(body);
 	    //console.log(info['entities'].subject[0].value);
 	    //console.log(info['entities'].intent[0].value);
-	    if(info['entities']) {
+	    if(info['entities'].subject) {
 		    
 		    answer.findOne()
 			    //.where({field1: 1})
@@ -103,7 +103,7 @@ app.post('/ask/', cors(corsOptions), function (req, res) {
 			    .exec(function(err, doc)
 			    {
 				    //console.log(doc.answer)
-				    res.send({'subject': info['entities'].subject[0].value, 'definition': doc.answer});
+				    res.send({'subject': info['entities'].subject[0].value, 'definition': doc.answer.charAt(0).toUpperCase() + doc.answer.slice(1)});
 			        //var max = doc.LAST_MOD;
 			        // ...
 			    }
@@ -112,7 +112,7 @@ app.post('/ask/', cors(corsOptions), function (req, res) {
 	    	
 	    }
 	    else {
-		    res.send({ 'subject': 'No data on this subject :/', 'definition' : ' '});
+		    res.send({ 'subject': 'No data on this subject :/', 'definition' : '0'});
 	    }
 	    //console.log(info.stargazers_count + " Stars");
 	    //console.log(info.forks_count + " Forks");
