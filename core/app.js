@@ -41,42 +41,47 @@ app.post('/grade/', cors(corsOptions), function (req, res) {
 	globalScore = 0;
 	var file = 'keywords.json';
 	
+	if(req.body.answer.trim().split(/\s+/).length > 15) {
   	// Process
-  	jsonfile.readFile(file, function(err, obj) {
-	  	
-	    //console.dir(obj['keywords']);
-	    for(var i = 0; i < 3; i++) {
-	      //console.log(obj["keywords"][i]);
-	      ///*
-	      var data = obj["keywords"][i];
-	      //console.log(data);
-	      for(var j = 0; j < data.length; j++) {
-
-	        var subdata = data[j];
-	        totalScore += (i+1);
-	        if (req.body.answer.search(subdata) != -1) {
-	          globalScore += (i+1);
-	        } else {
-	          //console.log('not contain');
-	        }
-	      }
-	     }
-	    //console.log(globalScore/totolScore);
-	    globalScore = globalScore/totalScore;
-	    res.send({score: globalScore});
-	    
-		//Save answer for further queries
-	  	var logger = new answer({ answer: req.body.answer, grade: globalScore, question: 'photosynthesis' });
-	  	
-		logger.save(function (err) {
-		  if (err) {
-		    console.log(err);
-		  } else {
-		    //console.log('1');
-		  }
-		});
+	  	jsonfile.readFile(file, function(err, obj) {
+		  	
+		    //console.dir(obj['keywords']);
+		    for(var i = 0; i < 3; i++) {
+		      //console.log(obj["keywords"][i]);
+		      ///*
+		      var data = obj["keywords"][i];
+		      //console.log(data);
+		      for(var j = 0; j < data.length; j++) {
 	
-	});
+		        var subdata = data[j];
+		        totalScore += (i+1);
+		        if (req.body.answer.search(subdata) != -1) {
+		          globalScore += (i+1);
+		        } else {
+		          //console.log('not contain');
+		        }
+		      }
+		     }
+		    //console.log(globalScore/totolScore);
+		    globalScore = globalScore/totalScore;
+		    res.send({score: globalScore});
+		    
+			//Save answer for further queries
+		  	var logger = new answer({ answer: req.body.answer, grade: globalScore, question: 'photosynthesis' });
+		  	
+			logger.save(function (err) {
+			  if (err) {
+			    console.log(err);
+			  } else {
+			    //console.log('1');
+			  }
+			});
+		
+		});
+	}
+	else {
+		res.send({score: -1, errorInfo: "Insufficient word count"});
+	}
 	
 });
 
