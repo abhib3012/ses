@@ -1,0 +1,26 @@
+{
+  "name": "ses",
+  "version": "0.0.0",
+  "description": "The Subjective Evaluation System",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/latentlot/ses.git"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/latentlot/ses/issues"
+  },
+  "dependencies": {
+    "express": "~4.15.2",
+    "mongoose": "~4.9.3",
+    "cors": "~2.8.3",
+    "body-parser": "~1.17.1",
+    "jsonfile": "~2.4.0",
+    "request": "~2.81.0"
+  }
+}

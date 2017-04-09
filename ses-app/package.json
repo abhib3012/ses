@@ -1,0 +1,31 @@
+{
+  "name": "notr",
+  "version": "1.0.1",
+  "description": "Use localStorage instead of Cloud",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "build:macos": "electron-packager ./ notr --platform=darwin --arch=x64 --icon=./content/assets/images/icon.icns --app-version=$npm_package_version",
+    "build:linux": "electron-packager ./ notr --platform=linux --arch=x64 --icon=./content/assets/images/icon.icns --app-version=$npm_package_version",
+    "build:linux32": "electron-packager ./ notr --platform=darwin --arch=ia32 --icon=./content/assets/images/icon.icns --app-version=$npm_package_version",
+    "build:windows": "electron-packager ./ notr --platform=win32 --arch=x64 --icon=./content/assets/images/icon.icns --app-version=$npm_package_version",
+    "build:windows32": "electron-packager ./ notr --platform=win32 --arch=ia32 --icon=./content/assets/images/icon.icns --app-version=$npm_package_version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhaval17/notr.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dhaval17/notr/issues"
+  },
+  "homepage": "https://github.com/dhaval17/notr#readme",
+  "devDependencies": {
+    "electron-prebuilt": "^1.3.5"
+  },
+  "dependencies": {
+    "jquery": "^3.1.1"
+  }
+}
