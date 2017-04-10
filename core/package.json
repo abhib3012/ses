@@ -21,6 +21,7 @@
     "cors": "~2.8.3",
     "body-parser": "~1.17.1",
     "jsonfile": "~2.4.0",
-    "request": "~2.81.0"
+    "request": "~2.81.0",
+    "re-ontology": "0.0.4"
   }
 }

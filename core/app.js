@@ -2,20 +2,18 @@ var express = require('express');
 var mongoose = require('mongoose');
 var jsonfile = require('jsonfile');
 var request = require('request');
+var reontology = require('re-ontology');
 
 mongoose.connect('mongodb://localhost/ses');
 
 //let Wit = null;
 //let interactive = null;
 
-Wit = require('node-wit').Wit;
-interactive = require('node-wit').interactive;
 
 var answer = mongoose.model('answers', 
 	{
 		answer: String,
-		grade: Number,
-		question: String
+		grade: Number
 	}
 );
 
@@ -37,51 +35,38 @@ app.use(bodyParser.urlencoded({limit: '1mb', extended: true}));
 
 app.post('/grade/', cors(corsOptions), function (req, res) {
 	
-	totalScore = 0;
-	globalScore = 0;
-	var file = 'keywords.json';
+	answer = req.body.answer;
 	
-	if(req.body.answer.trim().split(/\s+/).length > 15) {
-  	// Process
-	  	jsonfile.readFile(file, function(err, obj) {
-		  	
-		    //console.dir(obj['keywords']);
-		    for(var i = 0; i < 3; i++) {
-		      //console.log(obj["keywords"][i]);
-		      ///*
-		      var data = obj["keywords"][i];
-		      //console.log(data);
-		      for(var j = 0; j < data.length; j++) {
+	var options = {
+	  url: 'https://api.wit.ai/message?v=20170408&q=' + answer,
+	  headers: {
+	    'Authorization': 'Bearer E3GDZKK7S5EI3NC6JWIVOO2IXGP53UHI'
+	  }
+	};
 	
-		        var subdata = data[j];
-		        totalScore += (i+1);
-		        if (req.body.answer.search(subdata) != -1) {
-		          globalScore += (i+1);
-		        } else {
-		          //console.log('not contain');
-		        }
-		      }
-		     }
-		    //console.log(globalScore/totolScore);
-		    globalScore = globalScore/totalScore;
-		    res.send({score: globalScore});
-		    
-			//Save answer for further queries
-		  	var logger = new answer({ answer: req.body.answer, grade: globalScore, question: 'photosynthesis' });
-		  	
-			logger.save(function (err) {
-			  if (err) {
-			    console.log(err);
-			  } else {
-			    //console.log('1');
-			  }
+	function callback(error, response, body) {
+	  if (!error && response.statusCode == 200) {
+	    var info = JSON.parse(body);
+	    if(info['entities'].father && info['entities'].intent[0].value == "answer") {
+	    	answer = info['entities'].father[0].value;
+	    	
+	    	reontology.db.getSystem('people', function(result){
+			    people = result;
+			    if(people.subTypeMap.Male.subTypeMap.Robert.description.father == answer) {
+				    res.send({"score": "Correct"});
+			    }
+			    else {
+				    res.send({"score": "Incorrect"});
+			    } 
 			});
-		
-		});
+	    }
+	    else {
+		    res.send({ 'errorInfo': 'No data on this subject :/', 'score' : '-1'});
+	    }
+	  }
 	}
-	else {
-		res.send({score: -1, errorInfo: "Insufficient word count"});
-	}
+	 
+	request(options, callback);
 	
 });
 
