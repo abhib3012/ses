@@ -71,9 +71,26 @@ app.post('/grade/', cors(corsOptions), function (req, res) {
 						globalScore += data[i].priority;
 					}
 				}
+				
 				res.send({"score": (globalScore/totalScore)});
+				
+				var logger = new answer({ answer: req.body.answer, grade: globalScore, question: question });
+				logger.save(function (err) {
+				  if (err) {
+				    console.log(err);
+				  } else {
+				    //console.log('1');
+				  }
+				});
+			
 			});
 		}
+		else {
+			res.send({"score" : -1, errorInfo : "No data regarding this question"});
+		}
+	}
+	else {
+		res.send({score : -1, errorInfo : "Insufficient Word Count"})
 	}	
 });
 
@@ -91,15 +108,16 @@ app.post('/ask/', cors(corsOptions), function (req, res) {
 	  if (!error && response.statusCode == 200) {
 	    var info = JSON.parse(body);
 	    //console.log(info['entities'].subject[0].value);
+	    info['entities'].subject[0].value = info['entities'].subject[0].value.toLowerCase();
 	    //console.log(info['entities'].intent[0].value);
 	    if(info['entities'].subject) {
 		    
 		    answer.findOne()
-			    //.where({field1: 1})
+			    .where({"question" : info['entities'].subject[0].value})
 			    .sort('-grade')
 			    .exec(function(err, doc)
 			    {
-				    //console.log(doc.answer)
+				    console.log("doc --> " + JSON.stringify(doc))
 				    res.send({'subject': info['entities'].subject[0].value, 'definition': doc.answer.charAt(0).toUpperCase() + doc.answer.slice(1)});
 			        //var max = doc.LAST_MOD;
 			        // ...
