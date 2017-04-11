@@ -8,8 +8,8 @@ mongoose.connect('mongodb://localhost/ses');
 //let Wit = null;
 //let interactive = null;
 
-Wit = require('node-wit').Wit;
-interactive = require('node-wit').interactive;
+//Wit = require('node-wit').Wit;
+//interactive = require('node-wit').interactive;
 
 var answer = mongoose.model('answers', 
 	{
@@ -18,6 +18,15 @@ var answer = mongoose.model('answers',
 		question: String
 	}
 );
+
+var keyword = mongoose.model('keywords', 
+	{
+		question: String,
+		priority: Number,
+		key: String
+	}
+);
+
 
 var app = express();
 var cors = require('cors');
@@ -39,45 +48,33 @@ app.post('/grade/', cors(corsOptions), function (req, res) {
 	
 	totalScore = 0;
 	globalScore = 0;
-	var file = 'keywords.json';
+	question = "";
+	req.body.answer = req.body.answer.toLowerCase();
 	
-  	// Process
-  	jsonfile.readFile(file, function(err, obj) {
-	  	
-	    //console.dir(obj['keywords']);
-	    for(var i = 0; i < 3; i++) {
-	      //console.log(obj["keywords"][i]);
-	      ///*
-	      var data = obj["keywords"][i];
-	      //console.log(data);
-	      for(var j = 0; j < data.length; j++) {
-
-	        var subdata = data[j];
-	        totalScore += (i+1);
-	        if (req.body.answer.search(subdata) != -1) {
-	          globalScore += (i+1);
-	        } else {
-	          //console.log('not contain');
-	        }
-	      }
-	     }
-	    //console.log(globalScore/totolScore);
-	    globalScore = globalScore/totalScore;
-	    res.send({score: globalScore});
-	    
-		//Save answer for further queries
-	  	var logger = new answer({ answer: req.body.answer, grade: globalScore, question: 'photosynthesis' });
-	  	
-		logger.save(function (err) {
-		  if (err) {
-		    console.log(err);
-		  } else {
-		    //console.log('1');
-		  }
-		});
-	
-	});
-	
+	if(req.body.answer.trim().split(/\s+/).length > 15) {
+		if(req.body.answer.search("photosynthesis") == 0) {
+			question = "photosynthesis";
+		}
+		else if(req.body.answer.search("schizophrenia") == 0) {
+			question = "schizophrenia";
+		}
+		else {
+			res.send({score: -1, errorInfo: "Internal Error"});
+		}
+		
+		if(question != "") {
+			keyword.find({"question": question}, function(err, data){
+				//console.log(JSON.stringify(data));
+				for(var i = 0; i < data.length; i++) {
+					totalScore += data[i].priority;
+					if(req.body.answer.search(data[i].key) != -1) {
+						globalScore += data[i].priority;
+					}
+				}
+				res.send({"score": (globalScore/totalScore)});
+			});
+		}
+	}	
 });
 
 app.post('/ask/', cors(corsOptions), function (req, res) {
@@ -130,4 +127,4 @@ app.get('/', cors(corsOptions), function (req, res) {
 	res.sendfile('static/index.html');
 });
 
-app.listen(80);
+app.listen(8082);

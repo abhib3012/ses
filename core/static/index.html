@@ -30,7 +30,7 @@
     <script>
 	    if (location.protocol != 'https:')
 		{
-		 location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+		 //location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
 		}
 	</script>
   </head>
@@ -71,7 +71,7 @@
 
       <div class="starter-template">
         <h3>Grade</h3>
-        <input type="text" name="answer" class="form-control" placeholder="What is Photosynthesis ?" id="answer-text"/> </br>
+        <input type="text" name="answer" class="form-control" placeholder="Answer" id="answer-text"/> </br>
         <input class="btn btn-default" type="button" value="Grade" onclick="getGrades()">
       </div>
 	  <div>
@@ -152,7 +152,7 @@ return a}).reduce(function(a,b){return{x:a.x+(b&&b.x)||0,y:a.y+(b&&b.y)||0}},{x:
 			    type: 'POST',
 			    // make sure you respect the same origin policy with this url:
 			    // http://en.wikipedia.org/wiki/Same_origin_policy
-			    url: 'https://ses.abhib.xyz/grade/',
+			    url: 'http://ses.abhib.xyz:8082/grade/',
 			    data: { 
 			        'answer': document.getElementById("answer-text").value
 			    },
@@ -228,7 +228,7 @@ return a}).reduce(function(a,b){return{x:a.x+(b&&b.x)||0,y:a.y+(b&&b.y)||0}},{x:
 			    type: 'POST',
 			    // make sure you respect the same origin policy with this url:
 			    // http://en.wikipedia.org/wiki/Same_origin_policy
-			    url: 'https://ses.abhib.xyz/ask/',
+			    url: 'http://ses.abhib.xyz:8082/ask/',
 			    data: { 
 			        'question': document.getElementById("question-value").value
 			    },
