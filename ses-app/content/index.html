@@ -159,8 +159,13 @@ return a}).reduce(function(a,b){return{x:a.x+(b&&b.x)||0,y:a.y+(b&&b.y)||0}},{x:
 			    },
 			    success: function(msg){
 			        //alert(msg);
-			        document.getElementById("returnedGrade").innerHTML = (msg.score * 100) + ' %';
-			        drawChar(msg.score);
+			        if(msg.score == -1) {
+				        document.getElementById("returnedGrade").innerHTML = msg.errorInfo;
+			        }
+			        else {
+			        	document.getElementById("returnedGrade").innerHTML = (msg.score * 100) + ' %';
+						drawChar(msg.score);
+					}
 			    }
 			});
 

@@ -30,7 +30,7 @@
     <script>
 	    if (location.protocol != 'https:')
 		{
-		 //location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+		 location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
 		}
 	</script>
   </head>
@@ -71,7 +71,7 @@
 
       <div class="starter-template">
         <h3>Grade</h3>
-        <input type="text" name="answer" class="form-control" placeholder="Answer" id="answer-text"/> </br>
+        <input type="text" name="answer" class="form-control" placeholder="What is Photosynthesis ?" id="answer-text"/> </br>
         <input class="btn btn-default" type="button" value="Grade" onclick="getGrades()">
       </div>
 	  <div>
